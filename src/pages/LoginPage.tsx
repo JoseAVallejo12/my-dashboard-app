@@ -38,7 +38,7 @@ export const LoginPage = () => {
     }
 
     // Guardar token en localStorage y redirigir a la página del dashboard
-    const token = generateToken;
+    const token = user.token || "";
     localStorage.setItem("token", token);
     navigate("/dashboard");
   };
