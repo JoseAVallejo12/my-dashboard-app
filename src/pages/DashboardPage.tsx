@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getPokemon, getPokemonById } from "../api/pokemon/pokemonService";
 
 interface Pokemon {
   id: number;
   name: string;
   image: string;
+  weight: number;
+  moves: any[];
+  abilities: any[];
 }
 
 export const DashboardPage = () => {
@@ -15,26 +19,33 @@ export const DashboardPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [navigate]);
 
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${(currentPage - 1) * 10}`);
-        const data = await response.json();
-        const pokemonsData = await Promise.all(data.results.map(async (pokemon: { name: string; url: string }) => {
-          const pokemonResponse = await fetch(pokemon.url);
-          const pokemonData = await pokemonResponse.json();
-          return {
-            id: pokemonData.id,
-            name: pokemonData.name,
-            image: pokemonData.sprites.front_default,
-          };
-        }));
+        let offset = (currentPage - 1) * 10;
+        const data = await getPokemon(10, offset);
+
+        const pokemonsData = await Promise.all(
+          data.results.map(async (pokemon: { name: string; url: string }) => {
+            const pokemonId = pokemon.url.split("/")[6];
+            const pokemonData = await getPokemonById(pokemonId);
+            return {
+              id: pokemonData.id,
+              name: pokemonData.name,
+              image: pokemonData.sprites.front_default,
+              weight: pokemonData.weight,
+              moves: pokemonData.moves,
+              abilities: pokemonData.abilities,
+            };
+          })
+        );
+
         setPokemons(pokemonsData);
         setTotalPages(Math.ceil(data.count / 10));
       } catch (error) {
@@ -56,26 +67,41 @@ export const DashboardPage = () => {
     setCurrentPage(currentPage + 1);
   };
 
+  const printPokemons = () => {
+    console.log({ pokemons });
+  };
+
   return (
     <div>
-      <nav>
-        <div>My Pokedex</div>
-        <div>Avatar</div>
-      </nav>
-      <main>
-        <ul>
-          {pokemons.map(pokemon => (
-            <li key={pokemon.id} onClick={() => handlePokemonClick(pokemon.id)}>
-              <img src={pokemon.image} alt={pokemon.name} />
-              <div>{pokemon.name}</div>
-            </li>
-          ))}
-        </ul>
-        <div>
-          <button disabled={currentPage === 1} onClick={handlePrevClick}>Previous</button>
-          <button disabled={currentPage === totalPages} onClick={handleNextClick}>Next</button>
-        </div>
-      </main>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {pokemons.map((pokemon: Pokemon) => (
+          <div
+            key={pokemon.id}
+            className="bg-white rounded-lg overflow-hidden shadow-md"
+          >
+            <img
+              className="w-full h-48 object-cover"
+              src={pokemon.image}
+              alt={pokemon.name}
+            />
+            <div className="px-4 py-2">
+              <h3 className="text-gray-700 font-bold text-lg mb-2">
+                {pokemon.name}
+              </h3>
+              <p className="text-gray-700 text-base">{pokemon.weight}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div>
+        <button disabled={currentPage === 1} onClick={handlePrevClick}>
+          Previous
+        </button>
+        <button disabled={currentPage === totalPages} onClick={handleNextClick}>
+          Next
+        </button>
+      </div>
+      <button onClick={printPokemons}>VER OBJETO</button>
     </div>
   );
 };

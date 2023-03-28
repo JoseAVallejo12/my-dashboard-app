@@ -75,6 +75,7 @@ export const LoginPage = () => {
     <div className="flex items-center justify-center min-h-screen">
     <div className="w-full max-w-md">
       <form
+        onSubmit={handleSubmit}
         // onSubmit={handleLogin}
         className="bg-white shadow-lg rounded px-12 pt-6 pb-8 mb-4"
       >
@@ -83,13 +84,15 @@ export const LoginPage = () => {
             className="block text-gray-700 font-bold mb-2"
             htmlFor="username"
           >
-            Username
+            email
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="username"
             type="text"
             placeholder="Enter your username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} required
             // value={username}
             // onChange={(e) => setUsername(e.target.value)}
           />
@@ -111,11 +114,10 @@ export const LoginPage = () => {
           />
         </div>
         <div className="flex items-center justify-between">
-          <button
+          <button type="submit" disabled={loading}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
           >
-            Sign In
+            {loading ? "Cargando..." : "Ingresar"}
           </button>
           <a
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
