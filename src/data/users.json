@@ -6,16 +6,6 @@
       "password": "123",
       "name": "user1",
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6InVzZXIxIiwiaWF0IjoxNTE2MjM5MDIyLCJlbWFpbCI6InVzZXIxQGV4YW1wbGUuY29tIn0.c-oGVfu-fHsrwNjLeSTlSc2dXat11WxjGHg58ROj2vI"
-    },
-    {
-      "id": 2,
-      "email": "user2@example.com",
-      "password": "password2"
-    },
-    {
-      "id": 3,
-      "email": "user3@example.com",
-      "password": "password3"
     }
   ]
 }

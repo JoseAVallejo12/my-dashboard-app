@@ -1,4 +1,9 @@
-export const validateEmail = (email: string): boolean => {
+export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+};
+
+export const isValidPassword = (password: string): boolean => {
+  const minPassCharacter = 3;
+  return password.length >= minPassCharacter;
 };
