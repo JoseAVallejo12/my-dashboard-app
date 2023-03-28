@@ -69,7 +69,7 @@ export const LoginPage = () => {
                 // onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div className="mb-6">
+            <div className="mb-6 password-input">
               <label
                 className="block text-gray-700 font-bold mb-2"
                 htmlFor="password"
@@ -84,6 +84,7 @@ export const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {/* <i className="far fa-eye" onClick={handlePasswordVisibility}></i> */}
             </div>
             <div className="flex items-center justify-between">
               <button
